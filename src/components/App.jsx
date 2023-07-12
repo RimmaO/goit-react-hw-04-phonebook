@@ -14,53 +14,26 @@ export default function App() {
   );
   const [filter, setFilter] = useState('');
 
-  useEffect(
-    () => {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-    },
-    // prevState => {
-    //   console.log(contacts);
-    //   if (prevState.contacts !== contacts)
-    //     localStorage.setItem('contacts', JSON.stringify(contacts));
-    //   if (prevState.contacts.length < contacts.length)
-    //     toast.success('Create new contact');
-    //   if (prevState.contacts.length > contacts.length)
-    //     toast.error('Delete contact');
-    // },
-    [contacts]
-  );
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
-  const createContact = ({ name, number }) => {
-    const newContact = { name: name, number: number, id: nanoid() };
+  const createContact = (name, number) => {
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      return toast.error(`${name} is already in contacts`);
+    }
+    const newContact = {
+      name,
+      number,
+      id: nanoid(),
+    };
 
-    setContacts(prevContacts => {
-      if (
-        prevContacts.find(
-          contact =>
-            contact.name.toLowerCase() === newContact.name.toLowerCase()
-        )
-      ) {
-        toast.error(`${newContact.name} is already in contacts`);
-        return prevContacts;
-      }
-      return [newContact, ...prevContacts];
-    });
+    setContacts(contacts => [newContact, ...contacts]);
   };
-
-  // const createContact = newContact => {
-  //   setContacts(prevContacts => {
-  //     if (
-  //       prevContacts.find(
-  //         contact =>
-  //           contact.name.toLowerCase() === newContact.name.toLowerCase()
-  //       )
-  //     ) {
-  //       alert(`${newContact.name} is already in contacts`);
-  //       return prevContacts;
-  //     }
-  //     return [newContact, ...prevContacts];
-  //   });
-  // };
 
   const handleChangeFilter = event => {
     setFilter(event.target.value);
