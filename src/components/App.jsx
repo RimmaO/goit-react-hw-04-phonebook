@@ -18,7 +18,7 @@ export default function App() {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const createContact = (name, number) => {
+  const createContact = ({ name, number }) => {
     if (
       contacts.find(
         contact => contact.name.toLowerCase() === name.toLowerCase()
